@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/home/amin/Workspace/local/someip_benchmark/build/socket",
+  "command": "/bin/g++-9   -I/home/amin/Workspace/local/someip_benchmark -isystem /home/amin/Applications/vsomeip/3.1.7/include  -g   -std=gnu++14 -o CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o -c /home/amin/Workspace/local/someip_benchmark/socket/socket_sub.cpp",
+  "file": "/home/amin/Workspace/local/someip_benchmark/socket/socket_sub.cpp"
+},
+{
+  "directory": "/home/amin/Workspace/local/someip_benchmark/build/socket",
+  "command": "/bin/g++-9   -I/home/amin/Workspace/local/someip_benchmark -isystem /home/amin/Applications/vsomeip/3.1.7/include  -g   -std=gnu++14 -o CMakeFiles/socket_publisher.dir/socket_pub.cpp.o -c /home/amin/Workspace/local/someip_benchmark/socket/socket_pub.cpp",
+  "file": "/home/amin/Workspace/local/someip_benchmark/socket/socket_pub.cpp"
+},
+{
+  "directory": "/home/amin/Workspace/local/someip_benchmark/build/someip",
+  "command": "/bin/g++-9   -I/home/amin/Workspace/local/someip_benchmark -isystem /home/amin/Applications/vsomeip/3.1.7/include  -g   -std=gnu++14 -o CMakeFiles/someip_subscriber.dir/socket_sub.cpp.o -c /home/amin/Workspace/local/someip_benchmark/someip/socket_sub.cpp",
+  "file": "/home/amin/Workspace/local/someip_benchmark/someip/socket_sub.cpp"
+},
+{
+  "directory": "/home/amin/Workspace/local/someip_benchmark/build/someip",
+  "command": "/bin/g++-9   -I/home/amin/Workspace/local/someip_benchmark -isystem /home/amin/Applications/vsomeip/3.1.7/include  -g   -std=gnu++14 -o CMakeFiles/someip_publisher.dir/socket_pub.cpp.o -c /home/amin/Workspace/local/someip_benchmark/someip/socket_pub.cpp",
+  "file": "/home/amin/Workspace/local/someip_benchmark/someip/socket_pub.cpp"
+}
+]

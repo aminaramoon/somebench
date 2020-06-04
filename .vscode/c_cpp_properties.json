@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/home/amin/Applications/cppzmq/4.6.0/include",
+                "/home/amin/Applications/vsomeip/3.1.7/include"
+            ],
+            "defines": [],
+            "compilerPath": "/home/amin/Applications/llvm/10.0.0/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "clang-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,10 @@
+/home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/rebuild_cache.dir
+/home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/edit_cache.dir
+/home/amin/Workspace/local/someip_benchmark/build/socket/CMakeFiles/rebuild_cache.dir
+/home/amin/Workspace/local/someip_benchmark/build/socket/CMakeFiles/edit_cache.dir
+/home/amin/Workspace/local/someip_benchmark/build/socket/CMakeFiles/socket_subscriber.dir
+/home/amin/Workspace/local/someip_benchmark/build/socket/CMakeFiles/socket_publisher.dir
+/home/amin/Workspace/local/someip_benchmark/build/someip/CMakeFiles/edit_cache.dir
+/home/amin/Workspace/local/someip_benchmark/build/someip/CMakeFiles/someip_subscriber.dir
+/home/amin/Workspace/local/someip_benchmark/build/someip/CMakeFiles/rebuild_cache.dir
+/home/amin/Workspace/local/someip_benchmark/build/someip/CMakeFiles/someip_publisher.dir
