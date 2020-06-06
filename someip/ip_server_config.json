@@ -1,0 +1,47 @@
+{
+    "unicast": "192.168.0.5",
+    "logging": {
+        "level": "info",
+        "console": "true",
+        "file": {
+            "enable": "false",
+            "path": "/tmp/vsomeip.log"
+        },
+        "dlt": "true"
+    },
+    "applications": [
+        {
+            "name": "service-sample",
+            "id": "0x1277"
+        }
+    ],
+    "services": [
+        {
+            "service": "0x1234",
+            "instance": "0x5678",
+            "unreliable": "30509",
+            "events": [
+                {
+                    "event": "0x8777",
+                    "is_field": "true"
+                }
+            ],
+            "eventgroups": [
+                {
+                    "eventgroup": "0x4455",
+                    "events": [
+                        "0x8777"
+                    ]
+                }
+            ]
+        }
+    ],
+    "routing": "service-sample",
+    "service-discovery": {
+        "enable": "true",
+        "multicast": "224.244.224.245",
+        "port": "30490",
+        "protocol": "udp"
+    }
+}
+

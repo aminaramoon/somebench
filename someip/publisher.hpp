@@ -17,14 +17,14 @@ class SomeIpNetworkPublisherNode
 {
 public:
     SomeIpNetworkPublisherNode()
-        : application_(vsomeip::runtime::get()->create_application("SomeIpNetworkPublisherNode")) {}
+        : application_(vsomeip::runtime::get()->create_application("service-sample")) {}
 
     ~SomeIpNetworkPublisherNode() { Exit(); }
 
     bool Init(bool is_reliable)
     {
-        service_id_ = SERVICE_ID;
-        instance_id_ = INSTANCE_ID;
+        service_id_ = 0x1234;
+        instance_id_ = 0x5678;
 
         if (!is_registered_ && application_->init())
         {
@@ -41,8 +41,8 @@ public:
         auto offer_reliablity = is_reliable_ ? vsomeip::reliability_type_e::RT_RELIABLE
                                              : vsomeip::reliability_type_e::RT_UNRELIABLE;
 
-        event_group_id_ = EVENTGROUP_ID;
-        event_id_ = EVENT_ID;
+        event_group_id_ = 0x4455;
+        event_id_ = 0x8777;
 
         std::set<vsomeip::eventgroup_t> its_groups;
         its_groups.insert(event_group_id_);
@@ -64,7 +64,6 @@ public:
         timer.Begin();
         while (timer.IsReady())
         {
-            std::cout << "sending message" << std::endl;
             fragmenter_.Feed(message, is_reliable_);
             auto payloads = fragmenter_.GetFragmentedMessages();
             for (const auto &payload : payloads)

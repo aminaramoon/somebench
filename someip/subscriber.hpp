@@ -17,14 +17,14 @@ class SomeIpNetworkSubscriberNode
 {
 public:
     SomeIpNetworkSubscriberNode()
-        : application_(vsomeip::runtime::get()->create_application("SomeIpNetworkSubscriberNode")) {}
+        : application_(vsomeip::runtime::get()->create_application("client-sample")) {}
 
     ~SomeIpNetworkSubscriberNode() { Exit(); }
 
     bool Init()
     {
-        service_id_ = SERVICE_ID;
-        instance_id_ = INSTANCE_ID;
+        service_id_ = 0x1234;
+        instance_id_ = 0x5678;
 
         if (!is_registered_ && application_->init())
         {
@@ -37,8 +37,8 @@ public:
             });
         }
 
-        event_group_id_ = EVENTGROUP_ID;
-        event_id_ = EVENT_ID;
+        event_group_id_ = 0x4455;
+        event_id_ = 0x8777;
 
         application_->register_message_handler(
             service_id_, instance_id_, event_id_,
@@ -72,6 +72,7 @@ public:
         while (!stop_token_)
         {
             auto reassembled_msg = reassembler_.GetReassembledMessage();
+            std::cout << "Execute Message Received" << std::endl;
             if (reassembled_msg.empty() || stop_token_)
                 return false;
         }
@@ -106,12 +107,14 @@ private:
     void OnRawDataArrival(const std::shared_ptr<vsomeip::message> &message)
     {
         reassembler_.Feed(message);
+        std::cout << "OnRawDataArrival " << message->get_length() << std::endl;
     }
 
     void OnServiceAvailable(vsomeip::service_t service, vsomeip::instance_t instance,
                             bool is_available)
     {
         is_available_ = service == service_id_ && instance_id_ == instance && is_available;
+        std::cout << "Service Is Available OnServiceAvailable" << std::endl;
     }
 
     void OnSubscriptionStatusChange(const vsomeip::service_t service,
@@ -121,6 +124,7 @@ private:
     {
         is_subscribed_ = service == service_id_ && instance == instance_id_ && eventgroup == event_group_id_ &&
                          event_id == event_id_ && subcode == SubscriptionReturnCode::ACCPETED;
+        std::cout << "Service Is Available OnSubscriptionStatusChange" << std::endl;
     }
 
 private:

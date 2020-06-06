@@ -1,0 +1,34 @@
+{
+    "unicast": "192.168.0.54",
+    "netmask" : "255.255.255.0",
+    "logging": {
+        "level": "info",
+        "console": "true",
+        "file": {
+            "enable": "true",
+            "path": "/var/log/vsomeip.log"
+        },
+        "dlt": "true"
+    },
+    "applications": [
+        {
+            "name": "client-sample",
+            "id": "0x1343"
+        }
+    ],
+    "clients": [
+        {
+            "service": "0x1234",
+            "instance": "0x5678",
+            "unicast": "192.168.0.5",
+            "unreliable": "30509"
+        }
+    ],
+    "routing": "client-sample",
+    "service-discovery": {
+        "enable": "true",
+        "multicast": "224.244.224.245",
+        "port": "30490",
+        "protocol": "udp"
+    }
+}
