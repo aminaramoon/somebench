@@ -13,69 +13,73 @@
 #include "misc/timer.hpp"
 #include <vsomeip/vsomeip.hpp>
 
-class SomeIpNetworkPublisherNode
+class publisher
 {
 public:
-    SomeIpNetworkPublisherNode()
+    publisher()
         : application_(vsomeip::runtime::get()->create_application("service-sample")) {}
 
-    ~SomeIpNetworkPublisherNode() { Exit(); }
+    ~publisher() { exit(); }
 
-    bool Init(bool is_reliable)
+    bool init()
     {
-        service_id_ = 0x1234;
-        instance_id_ = 0x5678;
-
-        if (!is_registered_ && application_->init())
+        if (!application_->init())
         {
-            application_->register_state_handler([this](vsomeip::state_type_e e) {
-                is_registered_ = (e == vsomeip::state_type_e::ST_REGISTERED);
-                if (e == vsomeip::state_type_e::ST_REGISTERED)
-                {
-                    application_->offer_service(service_id_, instance_id_);
-                }
-            });
+            std::cout << ">>>> error ||| "
+                      << "application initializtion failed" << std::endl;
+            return false;
         }
 
-        is_reliable_ = is_reliable;
-        auto offer_reliablity = is_reliable_ ? vsomeip::reliability_type_e::RT_RELIABLE
-                                             : vsomeip::reliability_type_e::RT_UNRELIABLE;
-
-        event_group_id_ = 0x4455;
-        event_id_ = 0x8777;
+        application_->register_state_handler([this](vsomeip::state_type_e e) {
+            this->on_state(e);
+        });
 
         std::set<vsomeip::eventgroup_t> its_groups;
         its_groups.insert(event_group_id_);
         application_->offer_event(service_id_, instance_id_, event_id_, its_groups,
-                                  vsomeip::event_type_e::ET_FIELD, std::chrono::milliseconds::zero(),
-                                  false, true, nullptr, offer_reliablity);
+                                  vsomeip::event_type_e::ET_EVENT, std::chrono::milliseconds::zero(),
+                                  false, true, nullptr, vsomeip::reliability_type_e::RT_UNKNOWN);
 
-        if (!is_someip_running_)
-        {
-            someip_thread_ = std::thread([this]() { application_->start(); });
-            is_someip_running_ = true;
-        }
+        application_->register_message_handler(service_id_, instance_id_, ready_method_id_, [this](const auto &msg) { this->on_ready(msg); });
+
+        application_->register_message_handler(service_id_, instance_id_, shutdown_method_id_, [this](const auto &msg) { this->on_shutdown(msg); });
 
         return true;
     }
 
-    bool Execute(const std::string &message, Timer &timer)
+    void start()
     {
-        timer.Begin();
-        while (timer.IsReady())
+        someip_thread_ = std::thread([this]() { application_->start(); });
+        is_someip_running_ = true;
+    }
+
+    void run()
+    {
+        std::unique_lock<std::mutex> lk(mutex_);
+        cv_.wait(lk, [this]() { return is_registered_.load(); });
+        offer();
+    }
+
+    void offer()
+    {
+        std::cout << ">>>> info ||| "
+                  << "offering services" << std::endl;
+        application_->offer_service(service_id_, instance_id_);
+    }
+
+    void send(const std::string &message, std::chrono::milliseconds spacing)
+    {
+        while (!is_ending_)
         {
-            fragmenter_.Feed(message, is_reliable_);
+            std::this_thread::sleep_for(spacing);
+            fragmenter_.Feed(message, false);
             auto payloads = fragmenter_.GetFragmentedMessages();
             for (const auto &payload : payloads)
-            {
                 application_->notify(service_id_, instance_id_, event_id_, payload);
-                std::cout << "sending message" << std::endl;
-            }
         }
-        return true;
     }
 
-    bool Exit()
+    bool exit()
     {
         application_->clear_all_handler();
         application_->stop_offer_service(service_id_, instance_id_);
@@ -88,13 +92,46 @@ public:
         return true;
     }
 
+    void on_state(vsomeip::state_type_e e)
+    {
+        is_registered_ = e == vsomeip::state_type_e::ST_REGISTERED;
+        std::cout << ">>>> info ||| "
+                  << "service is " << (is_registered_ ? "registered" : "de-registered") << std::endl;
+        cv_.notify_one();
+    }
+
+    void on_ready(const std::shared_ptr<vsomeip::message> &msg)
+    {
+        is_listening_ = true;
+        cv_.notify_one();
+    }
+
+    void on_shutdown(const std::shared_ptr<vsomeip::message> &msg)
+    {
+        std::cout << ">>>> info ||| "
+                  << "shutdown message has been received" << std::endl;
+        is_ending_ = true;
+        cv_.notify_all();
+        exit();
+    }
+
+    void on_availability()
+    {
+    }
+
 private:
     std::shared_ptr<vsomeip::application> application_;
     MessageFragmenter fragmenter_;
-    std::uint16_t service_id_ = -1, instance_id_ = -1;
-    std::uint16_t event_group_id_ = -1, event_id_ = -1;
+    std::uint16_t service_id_ = 0x1234, instance_id_ = 0x5678;
+    std::uint16_t event_group_id_ = 0x4455, event_id_ = 0x8777;
+    std::uint16_t ready_method_id_ = 0x8777;
+    std::uint16_t shutdown_method_id_ = 0x8788;
     std::thread someip_thread_;
-    bool is_reliable_{true};
-    bool is_registered_{false};
-    bool is_someip_running_{false};
+    std::atomic<bool> is_reliable_{true};
+    std::atomic<bool> is_registered_{false};
+    std::atomic<bool> is_someip_running_{false};
+    std::atomic<bool> is_listening_{false};
+    std::atomic<bool> is_ending_{false};
+    std::mutex mutex_;
+    std::condition_variable cv_;
 };

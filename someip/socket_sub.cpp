@@ -6,15 +6,11 @@
 
 int main()
 {
-    SomeIpNetworkSubscriberNode subscriber;
+    subscriber subscriber;
 
-    auto t = std::thread([&]() {
-        std::cout << "running" << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(9));
-        subscriber.Exit();
-    });
+    subscriber.init();
+    subscriber.start();
+    subscriber.run();
 
-    subscriber.Init();
-    subscriber.Execute();
-    t.join();
+    std::this_thread::sleep_for(std::chrono::seconds(9));
 }

@@ -7,16 +7,12 @@
 
 int main()
 {
-    SomeIpNetworkPublisherNode publisher;
+    publisher publisher;
 
-    auto w = std::async(std::launch::async, [&]() {
-        std::this_thread::sleep_for(std::chrono::seconds(10));
-        publisher.Exit();
-    });
+    publisher.init();
+    publisher.start();
+    publisher.run();
 
-    publisher.Init(IS_TCP);
-    const std::string payload(MESSAGE_SIZE, 'a');
-    Timer timer(std::chrono::milliseconds(100), std::chrono::seconds(4));
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    publisher.Execute(payload, timer);
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+    publisher.exit();
 }

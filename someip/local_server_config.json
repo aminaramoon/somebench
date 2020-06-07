@@ -23,7 +23,7 @@
             "events": [
                 {
                     "event": "0x8777",
-                    "is_field": "true"
+                    "is_field": "false"
                 }
             ],
             "eventgroups": [
@@ -36,7 +36,6 @@
             ]
         }
     ],
-    "routing": "service-sample",
     "service-discovery": {
         "enable": "false",
         "multicast": "224.0.0.1",

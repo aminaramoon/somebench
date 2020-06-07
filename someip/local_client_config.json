@@ -24,7 +24,7 @@
         }
     ],
     "service-discovery": {
-        "enable": "true",
+        "enable": "false",
         "multicast": "224.0.0.1",
         "port": "30490",
         "protocol": "udp"

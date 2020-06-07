@@ -38,7 +38,7 @@
     ],
     "routing": "service-sample",
     "service-discovery": {
-        "enable": "true",
+        "enable": "false",
         "multicast": "224.244.224.245",
         "port": "30490",
         "protocol": "udp"
