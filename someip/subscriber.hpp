@@ -16,6 +16,12 @@
 class subscriber
 {
 public:
+    enum SubscriptionReturnCode : std::uint8_t
+    {
+        ACCPETED = 0x00,
+        REJECTED = 0x07
+    };
+
     subscriber()
         : application_(
               vsomeip::runtime::get()->create_application("client-sample")) {}
@@ -81,19 +87,22 @@ public:
         is_someip_running_ = true;
     }
 
-    void run()
+    void run(const std::chrono::milliseconds &duration)
     {
-    }
+        auto ready_thread = std::thread([this]() { inform_sender(); });
+        auto shutdown_thread = std::thread([this, duration]() { close_sender(duration); });
 
-    bool execute()
-    {
         while (!stop_token_)
         {
             auto reassembled_msg = reassembler_.GetReassembledMessage();
-            if (reassembled_msg.empty() || stop_token_)
-                return false;
+            if (!reassembled_msg.empty() && !stop_token_)
+                message_counter_++;
+            else
+                break;
         }
-        return true;
+
+        ready_thread.join();
+        shutdown_thread.join();
     }
 
     bool exit()
@@ -120,15 +129,10 @@ public:
         cv_.notify_one();
     }
 
-    enum SubscriptionReturnCode : std::uint16_t
-    {
-        ACCPETED = 0x00,
-        REJECTED = 0x07
-    };
-
     void on_data(const std::shared_ptr<vsomeip::message> &message)
     {
         reassembler_.Feed(message);
+        packet_count_++;
     }
 
     void on_availability(vsomeip::service_t service, vsomeip::instance_t instance,
@@ -152,11 +156,20 @@ public:
         ready_req->set_instance(instance_id_);
         ready_req->set_method(ready_method_id_);
         application_->send(ready_req);
+
+        start_clock_ = true;
+        cv_.notify_one();
     }
 
-    void close_sender()
+    void close_sender(const std::chrono::milliseconds &duration)
     {
         std::unique_lock<std::mutex> lk(mutex_);
+        cv_.wait(lk, [this]() { return start_clock_.load(); });
+
+        std::cout << ">>>> info ||| "
+                  << "starting the clock for end" << std::endl;
+
+        std::this_thread::sleep_for(duration);
 
         std::cout << ">>>> info ||| "
                   << "sending shutdown message to publisher" << std::endl;
@@ -166,6 +179,11 @@ public:
         ready_req->set_instance(instance_id_);
         ready_req->set_method(shutdown_method_id_);
         application_->send(ready_req);
+
+        std::cout << ">>>> info ||| "
+                  << "# packets received " << packet_count_ << ", # messages received " << message_counter_ << std::endl;
+
+        exit();
     }
 
     void on_subscription_status_change(const vsomeip::service_t service,
@@ -177,8 +195,8 @@ public:
         is_subscribed_ = service == service_id_ && instance == instance_id_ &&
                          eventgroup == eventgroup_id_ && event_id == event_id_ &&
                          subcode == SubscriptionReturnCode::ACCPETED;
-        std::cout << ">>>> info ||| " << (is_subscribed_ ? "subscribed to evengroup" : "not subscribed to evengroup") << std::endl;
-        cv_.notify_one();
+        std::cout << ">>>> info ||| " << (is_subscribed_ ? "subscribed to eventgroup" : "not subscribed to eventgroup") << std::endl;
+        cv_.notify_all();
     }
 
     bool on_subscription_change(const vsomeip::client_t client,
@@ -195,14 +213,17 @@ private:
     MessageReassembler reassembler_;
     std::uint16_t service_id_ = 0x1234, instance_id_ = 0x5678;
     std::uint16_t eventgroup_id_ = 0x4455, event_id_ = 0x8777;
-    std::uint16_t ready_method_id_ = 0x8777;
-    std::uint16_t shutdown_method_id_ = 0x8788;
+    std::uint16_t ready_method_id_ = 0x7777;
+    std::uint16_t shutdown_method_id_ = 0x8888;
     std::thread someip_thread_;
     std::atomic<bool> stop_token_{false};
     std::atomic<bool> is_registered_{false};
     std::atomic<bool> is_available_{false};
     std::atomic<bool> is_subscribed_{false};
     std::atomic<bool> is_someip_running_{false};
+    std::atomic<bool> start_clock_{false};
+    std::size_t message_counter_{0};
+    std::size_t packet_count_{0};
     std::mutex mutex_;
     std::condition_variable cv_;
 };

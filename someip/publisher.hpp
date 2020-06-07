@@ -35,10 +35,10 @@ public:
         });
 
         std::set<vsomeip::eventgroup_t> its_groups;
-        its_groups.insert(event_group_id_);
+        its_groups.insert(eventgroup_id_);
         application_->offer_event(service_id_, instance_id_, event_id_, its_groups,
                                   vsomeip::event_type_e::ET_EVENT, std::chrono::milliseconds::zero(),
-                                  false, true, nullptr, vsomeip::reliability_type_e::RT_UNKNOWN);
+                                  false, true, nullptr, vsomeip::reliability_type_e::RT_UNRELIABLE);
 
         application_->register_message_handler(service_id_, instance_id_, ready_method_id_, [this](const auto &msg) { this->on_ready(msg); });
 
@@ -53,11 +53,13 @@ public:
         is_someip_running_ = true;
     }
 
-    void run()
+    void run(const std::string &message, std::chrono::milliseconds spacing)
     {
         std::unique_lock<std::mutex> lk(mutex_);
         cv_.wait(lk, [this]() { return is_registered_.load(); });
         offer();
+        cv_.wait(lk, [this]() { return is_listening_.load(); });
+        send(message, spacing);
     }
 
     void offer()
@@ -75,12 +77,17 @@ public:
             fragmenter_.Feed(message, false);
             auto payloads = fragmenter_.GetFragmentedMessages();
             for (const auto &payload : payloads)
+            {
                 application_->notify(service_id_, instance_id_, event_id_, payload);
+                n_packets_sent_++;
+            }
         }
     }
 
     bool exit()
     {
+
+        std::cout << "number of packets sent " << n_packets_sent_ << std::endl;
         application_->clear_all_handler();
         application_->stop_offer_service(service_id_, instance_id_);
         application_->stop();
@@ -102,6 +109,8 @@ public:
 
     void on_ready(const std::shared_ptr<vsomeip::message> &msg)
     {
+        std::cout << ">>>> info ||| "
+                  << "subscriber is ready to get messages" << std::endl;
         is_listening_ = true;
         cv_.notify_one();
     }
@@ -115,23 +124,20 @@ public:
         exit();
     }
 
-    void on_availability()
-    {
-    }
-
 private:
     std::shared_ptr<vsomeip::application> application_;
     MessageFragmenter fragmenter_;
     std::uint16_t service_id_ = 0x1234, instance_id_ = 0x5678;
-    std::uint16_t event_group_id_ = 0x4455, event_id_ = 0x8777;
-    std::uint16_t ready_method_id_ = 0x8777;
-    std::uint16_t shutdown_method_id_ = 0x8788;
+    std::uint16_t eventgroup_id_ = 0x4455, event_id_ = 0x8777;
+    std::uint16_t ready_method_id_ = 0x7777;
+    std::uint16_t shutdown_method_id_ = 0x8888;
     std::thread someip_thread_;
     std::atomic<bool> is_reliable_{true};
     std::atomic<bool> is_registered_{false};
     std::atomic<bool> is_someip_running_{false};
     std::atomic<bool> is_listening_{false};
     std::atomic<bool> is_ending_{false};
+    std::size_t n_packets_sent_{0};
     std::mutex mutex_;
     std::condition_variable cv_;
 };

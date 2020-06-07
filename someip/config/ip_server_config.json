@@ -7,7 +7,7 @@
             "enable": "false",
             "path": "/tmp/vsomeip.log"
         },
-        "dlt": "true"
+        "dlt": "false"
     },
     "applications": [
         {
@@ -23,7 +23,7 @@
             "events": [
                 {
                     "event": "0x8777",
-                    "is_field": "true"
+                    "is_field": "false"
                 }
             ],
             "eventgroups": [

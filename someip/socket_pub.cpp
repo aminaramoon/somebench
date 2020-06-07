@@ -11,7 +11,8 @@ int main()
 
     publisher.init();
     publisher.start();
-    publisher.run();
+
+    publisher.run(std::string(1024, 'c'), std::chrono::milliseconds(1));
 
     std::this_thread::sleep_for(std::chrono::seconds(10));
     publisher.exit();
