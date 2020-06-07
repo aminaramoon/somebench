@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "socket/socket_publisher"
+			"path" : "someip/someip_publisher"
 		}
 	],
 	"backtrace" : 1,
@@ -16,7 +16,7 @@
 		],
 		"files" : 
 		[
-			"socket/CMakeLists.txt",
+			"someip/CMakeLists.txt",
 			"CMakeLists.txt"
 		],
 		"nodes" : 
@@ -53,7 +53,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g  "
+					"fragment" : "-O3 -DNDEBUG  "
 				},
 				{
 					"fragment" : "-std=gnu++14"
@@ -78,13 +78,13 @@
 			]
 		}
 	],
-	"id" : "socket_publisher::@9527ef4114e0baec7268",
+	"id" : "someip_publisher::@1388c32eb0e096ca5287",
 	"link" : 
 	{
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
+				"fragment" : "-O3 -DNDEBUG",
 				"role" : "flags"
 			},
 			{
@@ -173,12 +173,12 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "socket_publisher",
-	"nameOnDisk" : "socket_publisher",
+	"name" : "someip_publisher",
+	"nameOnDisk" : "someip_publisher",
 	"paths" : 
 	{
-		"build" : "socket",
-		"source" : "socket"
+		"build" : "someip",
+		"source" : "someip"
 	},
 	"sourceGroups" : 
 	[
@@ -195,7 +195,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "socket/socket_pub.cpp",
+			"path" : "someip/socket_pub.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],
