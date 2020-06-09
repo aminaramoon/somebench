@@ -48,17 +48,19 @@ class tcp_publisher {
 
   void send(const std::string &message, std::chrono::milliseconds spacing) {
     delays_.reserve(200);
+    std::chrono::microseconds total_delay{0};
+    std::size_t id = 0;
     while (!is_ending_) {
       auto before = std::chrono::system_clock::now();
       std::this_thread::sleep_for(spacing);
       auto delay = std::chrono::system_clock::now() - before;
-      delays_.emplace_back(std::chrono::duration_cast<std::chrono::microseconds>(delay));
+      total_delay += std::chrono::duration_cast<std::chrono::microseconds>(delay);
       fragmenter_.Feed(message, true);
       auto payloads = fragmenter_.GetFragmentedMessages();
       for (const auto &payload : payloads) {
         auto bytes_sent =
             ::send(socket_, (const void *)payload->get_data(), payload->get_length(), 0);
-        std::cout << "sending " << payload->get_length() << std::endl;
+        std::cout << "sending " << id++ << ", " << total_delay.count() << std::endl;
         if (bytes_sent != payload->get_length())
           std::cout << ">>>> error ||| "
                     << "you are not sending all the message" << std::endl;

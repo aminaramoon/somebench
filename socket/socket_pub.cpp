@@ -6,9 +6,8 @@
 #include "publisher.hpp"
 #include "tcp_publisher.hpp"
 
-int main()
-{
+int main() {
   tcp_publisher publisher;
   publisher.init();
-  publisher.run(std::string(MESSAGE_SIZE, 'a'), std::chrono::milliseconds(100));
+  publisher.run(std::string(MESSAGE_SIZE, 'a'), std::chrono::milliseconds(DELAY_MS));
 }
