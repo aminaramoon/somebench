@@ -10,19 +10,16 @@
 #include "misc/message_fragmenter.hpp"
 #include "misc/timer.hpp"
 
-class tcp_publisher
-{
-public:
+class tcp_publisher {
+ public:
   tcp_publisher() {}
 
   ~tcp_publisher() { exit(); }
 
-  bool init()
-  {
+  bool init() {
     socket_ = socket(AF_INET, SOCK_STREAM, 0);
     cmd_socket_ = socket(AF_INET, SOCK_DGRAM, 0);
-    if (socket_ == -1 || cmd_socket_ == -1)
-    {
+    if (socket_ == -1 || cmd_socket_ == -1) {
       std::cout << ">>>> error ||| "
                 << "failed to initialize sockets" << std::endl;
       return false;
@@ -40,8 +37,7 @@ public:
     const int enable = 1;
     int option = SO_REUSEADDR | SO_REUSEPORT;
     setsockopt(cmd_socket_, SOL_SOCKET, option, &enable, sizeof(int));
-    if (bind(cmd_socket_, (const sockaddr *)&command, sizeof(command)) < 0)
-    {
+    if (bind(cmd_socket_, (const sockaddr *)&command, sizeof(command)) < 0) {
       std::cout << ">>>> error ||| "
                 << "failed to bind to address" << std::endl;
       return false;
@@ -50,21 +46,19 @@ public:
     return true;
   }
 
-  void send(const std::string &message, std::chrono::milliseconds spacing)
-  {
+  void send(const std::string &message, std::chrono::milliseconds spacing) {
     delays_.reserve(200);
-    while (!is_ending_)
-    {
+    while (!is_ending_) {
       auto before = std::chrono::system_clock::now();
       std::this_thread::sleep_for(spacing);
       auto delay = std::chrono::system_clock::now() - before;
       delays_.emplace_back(std::chrono::duration_cast<std::chrono::microseconds>(delay));
       fragmenter_.Feed(message, true);
       auto payloads = fragmenter_.GetFragmentedMessages();
-      for (const auto &payload : payloads)
-      {
-        auto bytes_sent = ::send(socket_, (const void *)payload->get_data(),
-                                 payload->get_length(), 0);
+      for (const auto &payload : payloads) {
+        auto bytes_sent =
+            ::send(socket_, (const void *)payload->get_data(), payload->get_length(), 0);
+        std::cout << "sending " << payload->get_length() << std::endl;
         if (bytes_sent != payload->get_length())
           std::cout << ">>>> error ||| "
                     << "you are not sending all the message" << std::endl;
@@ -74,8 +68,7 @@ public:
     }
   }
 
-  void run(const std::string &message, std::chrono::milliseconds spacing)
-  {
+  void run(const std::string &message, std::chrono::milliseconds spacing) {
     std::thread command_thread([this]() { on_command(); });
     std::thread connect_thread([this]() { connect_to_subscriber(); });
 
@@ -84,18 +77,15 @@ public:
     send(message, spacing);
 
     std::cout << ">>>> info ||| "
-              << "sent # packets " << n_packets_sent_ << " # message "
-              << n_message_sent_ << " with spacing of " << spacing.count()
-              << " millisecond " << std::endl;
+              << "sent # packets " << n_packets_sent_ << " # message " << n_message_sent_
+              << " with spacing of " << spacing.count() << " millisecond " << std::endl;
 
     connect_thread.join();
     command_thread.join();
   }
 
-  void connect_to_subscriber()
-  {
-    while (true)
-    {
+  void connect_to_subscriber() {
+    while (true) {
       std::cout << ">>>> info ||| "
                 << "attempting connect to the subscriber" << std::endl;
       int status = connect(socket_, (const sockaddr *)&recipient_, sizeof(recipient_));
@@ -108,15 +98,13 @@ public:
               << "connecton successful" << std::endl;
   }
 
-  bool exit()
-  {
+  bool exit() {
     shutdown(socket_, SHUT_RDWR);
     shutdown(cmd_socket_, SHUT_RDWR);
     return true;
   }
 
-  void on_command()
-  {
+  void on_command() {
     std::cout << ">>>> info ||| "
               << "publisher is ready for commands" << std::endl;
     int cmd = 0;
@@ -124,11 +112,9 @@ public:
     struct sockaddr sender;
     socklen_t len;
 
-    do
-    {
+    do {
       recvfrom(cmd_socket_, (void *)&cmd, sizeof(int), 0, &sender, &len);
-      if (cmd == -124)
-      {
+      if (cmd == -124) {
         is_listening_ = true;
         cv_.notify_one();
         std::cout << ">>>> info ||| "
@@ -145,7 +131,7 @@ public:
     cv_.notify_one();
   }
 
-private:
+ private:
   MessageFragmenter fragmenter_;
   int socket_ = -1, cmd_socket_ = -1;
   struct sockaddr_in recipient_;

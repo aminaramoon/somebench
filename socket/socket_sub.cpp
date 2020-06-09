@@ -8,6 +8,6 @@
 int main()
 {
     tcp_subscriber subscriber;
-    subscriber.init(1200 + MultipartMessageHeaderSize);
+    subscriber.init(MESSAGE_SIZE + MultipartMessageHeaderSize);
     subscriber.run();
 }
