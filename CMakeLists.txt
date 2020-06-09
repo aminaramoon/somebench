@@ -6,8 +6,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Threads REQUIRED)
-find_package(ZeroMQ REQUIRED)
-find_package(cppzmq REQUIRED)
 find_package(vsomeip3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS log system)
 
