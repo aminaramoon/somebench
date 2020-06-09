@@ -164,7 +164,7 @@ public:
            (const sockaddr *)&server_addr_, sizeof(server_addr_));
 
     std::cout << ">>>> info ||| "
-              << "in " << std::chrono::duration_cast<std::chrono::microseconds>(last_ts_ - first_ts_).count() << " microseconds "
+              << last_id_ << " in " << std::chrono::duration_cast<std::chrono::microseconds>(last_ts_ - first_ts_).count() << " microseconds "
               << "# packets received " << number_packet_
               << ", # messages received " << number_of_message_ << std::endl;
 
