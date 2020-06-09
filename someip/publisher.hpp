@@ -73,7 +73,11 @@ public:
     {
         while (!is_ending_)
         {
+            auto before = std::chrono::system_clock::now();
             std::this_thread::sleep_for(spacing);
+            auto delay = std::chrono::system_clock::now() - before;
+            delays_.emplace_back(std::chrono::duration_cast<std::chrono::microseconds>(delay));
+
             fragmenter_.Feed(message, false);
             auto payloads = fragmenter_.GetFragmentedMessages();
             for (const auto &payload : payloads)
@@ -140,4 +144,5 @@ private:
     std::size_t n_packets_sent_{0};
     std::mutex mutex_;
     std::condition_variable cv_;
+    std::vector<std::chrono::microseconds> delays_;
 };

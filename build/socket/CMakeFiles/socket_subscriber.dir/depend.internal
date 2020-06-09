@@ -25,3 +25,4 @@ socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o
  /home/amin/Workspace/local/someip_benchmark/socket/config.hpp
  /home/amin/Workspace/local/someip_benchmark/socket/socket_sub.cpp
  /home/amin/Workspace/local/someip_benchmark/socket/subscriber.hpp
+ /home/amin/Workspace/local/someip_benchmark/socket/tcp_subscriber.hpp

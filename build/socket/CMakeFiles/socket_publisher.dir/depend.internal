@@ -24,3 +24,4 @@ socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.o
  /home/amin/Workspace/local/someip_benchmark/socket/config.hpp
  /home/amin/Workspace/local/someip_benchmark/socket/publisher.hpp
  /home/amin/Workspace/local/someip_benchmark/socket/socket_pub.cpp
+ /home/amin/Workspace/local/someip_benchmark/socket/tcp_publisher.hpp

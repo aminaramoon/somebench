@@ -23,4 +23,5 @@ socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.o: /home/amin/Applications
 socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.o: ../socket/config.hpp
 socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.o: ../socket/publisher.hpp
 socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.o: ../socket/socket_pub.cpp
+socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.o: ../socket/tcp_publisher.hpp
 

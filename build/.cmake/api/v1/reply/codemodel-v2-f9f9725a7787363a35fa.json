@@ -49,7 +49,7 @@
 					]
 				}
 			],
-			"name" : "Release",
+			"name" : "",
 			"projects" : 
 			[
 				{
@@ -74,28 +74,28 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "socket_publisher::@9527ef4114e0baec7268",
-					"jsonFile" : "target-socket_publisher-Release-de2a48549d7b2af06587.json",
+					"jsonFile" : "target-socket_publisher-845abe2eabedd3f76448.json",
 					"name" : "socket_publisher",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "socket_subscriber::@9527ef4114e0baec7268",
-					"jsonFile" : "target-socket_subscriber-Release-2b1a1230cb8508498fa0.json",
+					"jsonFile" : "target-socket_subscriber-5bc3c974f33e270dfcd8.json",
 					"name" : "socket_subscriber",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
 					"id" : "someip_publisher::@1388c32eb0e096ca5287",
-					"jsonFile" : "target-someip_publisher-Release-01aaa4c536e67c3ce496.json",
+					"jsonFile" : "target-someip_publisher-dfde3a382bad4c170b4e.json",
 					"name" : "someip_publisher",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
 					"id" : "someip_subscriber::@1388c32eb0e096ca5287",
-					"jsonFile" : "target-someip_subscriber-Release-9c1c7f17457dfbaa8442.json",
+					"jsonFile" : "target-someip_subscriber-e871b1745044b80d7a4c.json",
 					"name" : "someip_subscriber",
 					"projectIndex" : 0
 				}

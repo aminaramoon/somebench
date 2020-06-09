@@ -24,7 +24,7 @@ struct MessageReassembler
         }
     }
 
-    std::string GetReassembledMessage()
+    std::pair<std::string, int> GetReassembledMessage()
     {
         std::unique_lock<std::mutex> lk(mutex_);
         cv_.wait(lk, [this]() { return has_message_ || !is_running_; });
@@ -37,7 +37,7 @@ struct MessageReassembler
         }
         has_message_ = false;
         cv_.notify_one();
-        return msg;
+        return std::make_pair(std::move(msg), segmented_message_.SessionId());
     }
 
     void Notify()

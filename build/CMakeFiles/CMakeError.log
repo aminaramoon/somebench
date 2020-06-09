@@ -1,22 +1,22 @@
 Performing C++ SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
 Change Dir: /home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_20651/fast && /usr/bin/make  -f CMakeFiles/cmTC_20651.dir/build.make CMakeFiles/cmTC_20651.dir/build
+Run Build Command(s):/usr/bin/make cmTC_53691/fast && /usr/bin/make  -f CMakeFiles/cmTC_53691.dir/build.make CMakeFiles/cmTC_53691.dir/build
 make[1]: Entering directory '/home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_20651.dir/src.cxx.o
-/bin/g++-9    -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_20651.dir/src.cxx.o -c /home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_20651
-/home/amin/Applications/cmake/3.17.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_20651.dir/link.txt --verbose=1
-/bin/g++-9   -DCMAKE_HAVE_LIBC_PTHREAD    CMakeFiles/cmTC_20651.dir/src.cxx.o  -o cmTC_20651 
-/usr/bin/ld: CMakeFiles/cmTC_20651.dir/src.cxx.o: in function `main':
+Building CXX object CMakeFiles/cmTC_53691.dir/src.cxx.o
+/usr/bin/c++    -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_53691.dir/src.cxx.o -c /home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_53691
+/home/amin/Applications/cmake/3.17.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_53691.dir/link.txt --verbose=1
+/usr/bin/c++   -DCMAKE_HAVE_LIBC_PTHREAD    CMakeFiles/cmTC_53691.dir/src.cxx.o  -o cmTC_53691 
+/usr/bin/ld: CMakeFiles/cmTC_53691.dir/src.cxx.o: in function `main':
 src.cxx:(.text+0x46): undefined reference to `pthread_create'
 /usr/bin/ld: src.cxx:(.text+0x52): undefined reference to `pthread_detach'
 /usr/bin/ld: src.cxx:(.text+0x5e): undefined reference to `pthread_cancel'
 /usr/bin/ld: src.cxx:(.text+0x6f): undefined reference to `pthread_join'
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_20651.dir/build.make:107: cmTC_20651] Error 1
+make[1]: *** [CMakeFiles/cmTC_53691.dir/build.make:107: cmTC_53691] Error 1
 make[1]: Leaving directory '/home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/CMakeTmp'
-make: *** [Makefile:141: cmTC_20651/fast] Error 2
+make: *** [Makefile:141: cmTC_53691/fast] Error 2
 
 
 Source file was:
@@ -43,18 +43,18 @@ int main(void)
 Determining if the function pthread_create exists in the pthreads failed with the following output:
 Change Dir: /home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_27749/fast && /usr/bin/make  -f CMakeFiles/cmTC_27749.dir/build.make CMakeFiles/cmTC_27749.dir/build
+Run Build Command(s):/usr/bin/make cmTC_0623b/fast && /usr/bin/make  -f CMakeFiles/cmTC_0623b.dir/build.make CMakeFiles/cmTC_0623b.dir/build
 make[1]: Entering directory '/home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_27749.dir/CheckFunctionExists.cxx.o
-/bin/g++-9    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_27749.dir/CheckFunctionExists.cxx.o -c /home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx
-Linking CXX executable cmTC_27749
-/home/amin/Applications/cmake/3.17.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_27749.dir/link.txt --verbose=1
-/bin/g++-9   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_27749.dir/CheckFunctionExists.cxx.o  -o cmTC_27749  -lpthreads 
+Building CXX object CMakeFiles/cmTC_0623b.dir/CheckFunctionExists.cxx.o
+/usr/bin/c++    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_0623b.dir/CheckFunctionExists.cxx.o -c /home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx
+Linking CXX executable cmTC_0623b
+/home/amin/Applications/cmake/3.17.3/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0623b.dir/link.txt --verbose=1
+/usr/bin/c++   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_0623b.dir/CheckFunctionExists.cxx.o  -o cmTC_0623b  -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_27749.dir/build.make:107: cmTC_27749] Error 1
+make[1]: *** [CMakeFiles/cmTC_0623b.dir/build.make:107: cmTC_0623b] Error 1
 make[1]: Leaving directory '/home/amin/Workspace/local/someip_benchmark/build/CMakeFiles/CMakeTmp'
-make: *** [Makefile:141: cmTC_27749/fast] Error 2
+make: *** [Makefile:141: cmTC_0623b/fast] Error 2
 
 
 

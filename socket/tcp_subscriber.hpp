@@ -18,16 +18,17 @@
 #include "misc/timer.hpp"
 #include <vsomeip/vsomeip.hpp>
 
-class udp_subscriber
+class tcp_subscriber
 {
 public:
-  udp_subscriber() {}
+  tcp_subscriber() {}
 
-  ~udp_subscriber() { exit(); }
+  ~tcp_subscriber() { exit(); }
 
-  bool init()
+  bool init(std::size_t msg_size)
   {
-    socket_ = socket(AF_INET, SOCK_DGRAM, 0);
+    message_size_ = msg_size;
+    socket_ = socket(AF_INET, SOCK_STREAM, 0);
     cmd_socket_ = socket(AF_INET, SOCK_DGRAM, 0);
     if (socket_ == -1 || cmd_socket_ == -1)
     {
@@ -74,11 +75,12 @@ public:
       if (reassembled_msg.empty() || stop_token_)
         break;
       number_of_message_++;
+
       if (number_of_message_ == 100)
       {
         last_ts_ = std::chrono::system_clock::now();
-        last_id_ = id;
         is_done_ = true;
+        last_id_ = id;
         cv_.notify_one();
       }
     }
@@ -100,28 +102,51 @@ public:
 
   void receive_message()
   {
+
+    int recv_socket = -1;
+    {
+      std::cout << ">>>> info ||| "
+                << "listening for new cnnections" << std::endl;
+      listen(socket_, 32);
+      struct sockaddr addr;
+      socklen_t len;
+      recv_socket = accept(socket_, &addr, &len);
+    }
+
+    if (recv_socket <= 0)
+    {
+      std::cout << ">>>> error ||| "
+                << "failed to accept a new socket" << std::endl;
+      return;
+    }
+
     is_ready_ = true;
     cv_.notify_one();
     bool keep_reading = true;
-    bool first_read = true;
+    bool first_rcv = true;
     while (keep_reading && !stop_token_)
     {
-      std::vector<std::uint8_t> buffer(1400);
-      int bytes_recv =
-          recvfrom(socket_, (void *)buffer.data(), 1400, 0, NULL, NULL);
-
-      if (first_read)
+      std::vector<std::uint8_t> buffer(message_size_);
+      std::uint8_t *data = buffer.data();
+      int bytes_recv = 0;
+      std::size_t total_bytes_received = 0;
+      do
       {
-        first_read = false;
-        first_ts_ = std::chrono::system_clock::now();
-      }
+        bytes_recv = recv(recv_socket, (void *)(data + total_bytes_received), message_size_ - total_bytes_received, 0);
+        if (first_rcv)
+        {
+          first_ts_ = std::chrono::system_clock::now();
+          first_rcv = false;
+        }
+        total_bytes_received += bytes_recv;
+      } while (bytes_recv > 0 && total_bytes_received != message_size_);
 
       keep_reading = bytes_recv > 0;
       if (bytes_recv)
       {
         number_packet_++;
         auto message = vsomeip::runtime::get()->create_message(false);
-        buffer.resize(bytes_recv);
+        buffer.resize(total_bytes_received);
         message->get_payload()->set_data(std::move(buffer));
         reassembler_.Feed(message);
       }
@@ -146,7 +171,7 @@ public:
     {
       std::cout << ">>>> info ||| "
                 << "sending ready message" << std::endl;
-      int message = 124;
+      int message = -124;
       sendto(cmd_socket_, (const void *)&message, sizeof(int), 0,
              (const sockaddr *)&server_addr_, sizeof(server_addr_));
       std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -156,15 +181,14 @@ public:
 
     cv_.wait(lk, [this]() { return is_done_.load(); });
 
-    std::cout
-        << ">>>> info ||| "
-        << "sending shutdown message" << std::endl;
-    int message = 666;
+    std::cout << ">>>> info ||| "
+              << "sending shutdown message" << std::endl;
+    int message = last_id_;
     sendto(cmd_socket_, (const void *)&message, sizeof(int), 0,
            (const sockaddr *)&server_addr_, sizeof(server_addr_));
 
     std::cout << ">>>> info ||| "
-              << "in " << std::chrono::duration_cast<std::chrono::microseconds>(last_ts_ - first_ts_).count() << " microseconds "
+              << "in " << std::chrono::duration_cast<std::chrono::microseconds>(last_ts_ - first_ts_).count() << " milliseconds "
               << "# packets received " << number_packet_
               << ", # messages received " << number_of_message_ << std::endl;
 
@@ -181,9 +205,11 @@ private:
   std::atomic<bool> stop_token_{false};
   std::atomic_bool is_ready_{false};
   std::atomic_bool is_done_{false};
+  std::atomic_bool is_connected_{false};
   std::mutex mutex_;
   std::condition_variable cv_;
   std::size_t number_packet_{0}, number_of_message_{0};
+  std::size_t message_size_{0};
   std::chrono::system_clock::time_point first_ts_, last_ts_;
   int last_id_{0};
 };

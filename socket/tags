@@ -1,0 +1,42 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CLIENT_IP	config.hpp	3;"	d
+CMD_PORT	config.hpp	2;"	d
+DATA_PORT	config.hpp	1;"	d
+MESSAGE_SIZE	config.hpp	5;"	d
+SERVER_IP	config.hpp	4;"	d
+cmd_socket_	publisher.hpp	/^  int socket_ = -1, cmd_socket_ = -1;$/;"	m	class:udp_publisher
+cmd_socket_	subscriber.hpp	/^    int cmd_socket_ = -1;$/;"	m	class:udp_subscriber
+coordinate	subscriber.hpp	/^    void coordinate(std::chrono::milliseconds duration)$/;"	f	class:udp_subscriber
+cv_	publisher.hpp	/^  std::condition_variable cv_;$/;"	m	class:udp_publisher
+cv_	subscriber.hpp	/^    std::condition_variable cv_;$/;"	m	class:udp_subscriber
+exit	publisher.hpp	/^  bool exit() {$/;"	f	class:udp_publisher
+exit	subscriber.hpp	/^    bool exit()$/;"	f	class:udp_subscriber
+fragmenter_	publisher.hpp	/^  MessageFragmenter fragmenter_;$/;"	m	class:udp_publisher
+init	publisher.hpp	/^  bool init() {$/;"	f	class:udp_publisher
+init	subscriber.hpp	/^    bool init()$/;"	f	class:udp_subscriber
+main	socket_pub.cpp	/^int main()$/;"	f
+main	socket_sub.cpp	/^int main()$/;"	f
+mutex_	publisher.hpp	/^  std::mutex mutex_;$/;"	m	class:udp_publisher
+mutex_	subscriber.hpp	/^    std::mutex mutex_;$/;"	m	class:udp_subscriber
+on_command	publisher.hpp	/^  void on_command() {$/;"	f	class:udp_publisher
+reader_thread_	subscriber.hpp	/^    std::thread reader_thread_;$/;"	m	class:udp_subscriber
+reassembler_	subscriber.hpp	/^    MessageReassembler reassembler_;$/;"	m	class:udp_subscriber
+receive_message	subscriber.hpp	/^    void receive_message()$/;"	f	class:udp_subscriber
+recipient_	publisher.hpp	/^  struct sockaddr_in recipient_;$/;"	m	class:udp_publisher	typeref:struct:udp_publisher::sockaddr_in
+run	publisher.hpp	/^  void run(const std::string &message, std::chrono::milliseconds spacing) {$/;"	f	class:udp_publisher
+run	subscriber.hpp	/^    void run(std::chrono::milliseconds duration)$/;"	f	class:udp_subscriber
+send	publisher.hpp	/^  void send(const std::string &message, std::chrono::milliseconds spacing) {$/;"	f	class:udp_publisher
+server_addr_	subscriber.hpp	/^    struct sockaddr_in server_addr_;$/;"	m	class:udp_subscriber	typeref:struct:udp_subscriber::sockaddr_in
+socket_	publisher.hpp	/^  int socket_ = -1, cmd_socket_ = -1;$/;"	m	class:udp_publisher
+socket_	subscriber.hpp	/^    int socket_ = -1;$/;"	m	class:udp_subscriber
+udp_publisher	publisher.hpp	/^  udp_publisher() {}$/;"	f	class:udp_publisher
+udp_publisher	publisher.hpp	/^class udp_publisher {$/;"	c
+udp_subscriber	subscriber.hpp	/^    udp_subscriber() {}$/;"	f	class:udp_subscriber
+udp_subscriber	subscriber.hpp	/^class udp_subscriber$/;"	c
+~udp_publisher	publisher.hpp	/^  ~udp_publisher() { exit(); }$/;"	f	class:udp_publisher
+~udp_subscriber	subscriber.hpp	/^    ~udp_subscriber() { exit(); }$/;"	f	class:udp_subscriber

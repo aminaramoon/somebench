@@ -24,4 +24,5 @@ socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o: /home/amin/Application
 socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o: ../socket/config.hpp
 socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o: ../socket/socket_sub.cpp
 socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o: ../socket/subscriber.hpp
+socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o: ../socket/tcp_subscriber.hpp
 

@@ -53,10 +53,10 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-O3 -DNDEBUG  "
+					"fragment" : " "
 				},
 				{
-					"fragment" : "-std=gnu++14"
+					"fragment" : "-std=gnu++17"
 				}
 			],
 			"includes" : 
@@ -83,10 +83,6 @@
 	{
 		"commandFragments" : 
 		[
-			{
-				"fragment" : "-O3 -DNDEBUG",
-				"role" : "flags"
-			},
 			{
 				"fragment" : "",
 				"role" : "flags"

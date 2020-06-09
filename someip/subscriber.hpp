@@ -94,11 +94,17 @@ public:
 
         while (!stop_token_)
         {
-            auto reassembled_msg = reassembler_.GetReassembledMessage();
+            auto [reassembled_msg, id] = reassembler_.GetReassembledMessage();
             if (!reassembled_msg.empty() && !stop_token_)
                 message_counter_++;
             else
                 break;
+
+            if (message_counter_ == 100U)
+            {
+                last_ts_ = std::chrono::system_clock::now();
+                last_id_ = id;
+            }
         }
 
         ready_thread.join();
@@ -131,6 +137,14 @@ public:
 
     void on_data(const std::shared_ptr<vsomeip::message> &message)
     {
+        static bool is_first = true;
+        if (is_first)
+        {
+            first_ts_ = std::chrono::system_clock::now();
+            std::cout << ">>>> info ||| "
+                      << "recording the first packet arrival timestamp" << std::endl;
+            is_first = true;
+        }
         reassembler_.Feed(message);
         packet_count_++;
     }
@@ -226,4 +240,6 @@ private:
     std::size_t packet_count_{0};
     std::mutex mutex_;
     std::condition_variable cv_;
+    std::chrono::system_clock::time_point first_ts_, last_ts_;
+    int last_id_{0};
 };

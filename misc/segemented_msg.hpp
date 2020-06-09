@@ -84,7 +84,7 @@ public:
 
     std::shared_ptr<vsomeip::payload> Data() const noexcept
     {
-        auto segments = FlattenSegments();   
+        auto segments = FlattenSegments();
         return segments.front();
     }
 
@@ -143,6 +143,11 @@ public:
         }
 
         return segments;
+    }
+
+    std::int32_t SessionId() const noexcept
+    {
+        return current_header_.session_id_;
     }
 
     std::vector<std::vector<std::shared_ptr<vsomeip::payload>>> segments_payloads_;

@@ -80,15 +80,15 @@ include socket/CMakeFiles/socket_publisher.dir/flags.make
 socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.o: socket/CMakeFiles/socket_publisher.dir/flags.make
 socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.o: ../socket/socket_pub.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/amin/Workspace/local/someip_benchmark/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.o"
-	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /bin/g++-9  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/socket_publisher.dir/socket_pub.cpp.o -c /home/amin/Workspace/local/someip_benchmark/socket/socket_pub.cpp
+	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/socket_publisher.dir/socket_pub.cpp.o -c /home/amin/Workspace/local/someip_benchmark/socket/socket_pub.cpp
 
 socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/socket_publisher.dir/socket_pub.cpp.i"
-	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/amin/Workspace/local/someip_benchmark/socket/socket_pub.cpp > CMakeFiles/socket_publisher.dir/socket_pub.cpp.i
+	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/amin/Workspace/local/someip_benchmark/socket/socket_pub.cpp > CMakeFiles/socket_publisher.dir/socket_pub.cpp.i
 
 socket/CMakeFiles/socket_publisher.dir/socket_pub.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/socket_publisher.dir/socket_pub.cpp.s"
-	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/amin/Workspace/local/someip_benchmark/socket/socket_pub.cpp -o CMakeFiles/socket_publisher.dir/socket_pub.cpp.s
+	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/amin/Workspace/local/someip_benchmark/socket/socket_pub.cpp -o CMakeFiles/socket_publisher.dir/socket_pub.cpp.s
 
 # Object files for target socket_publisher
 socket_publisher_OBJECTS = \

@@ -1,0 +1,62 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+EVENTGROUP_ID	config.hpp	4;"	d
+EVENT_ID	config.hpp	5;"	d
+INSTANCE_ID	config.hpp	2;"	d
+IS_TCP	config.hpp	7;"	d
+MESSAGE_SIZE	config.hpp	8;"	d
+SERVICE_ID	config.hpp	1;"	d
+application_	publisher.hpp	/^    std::shared_ptr<vsomeip::application> application_;$/;"	m	class:publisher
+application_	subscriber.hpp	/^    std::shared_ptr<vsomeip::application> application_;$/;"	m	class:subscriber
+close_sender	subscriber.hpp	/^    void close_sender(const std::chrono::milliseconds &duration)$/;"	f	class:subscriber
+cv_	publisher.hpp	/^    std::condition_variable cv_;$/;"	m	class:publisher
+cv_	subscriber.hpp	/^    std::condition_variable cv_;$/;"	m	class:subscriber
+event_id_	publisher.hpp	/^    std::uint16_t eventgroup_id_ = 0x4455, event_id_ = 0x8777;$/;"	m	class:publisher
+event_id_	subscriber.hpp	/^    std::uint16_t eventgroup_id_ = 0x4455, event_id_ = 0x8777;$/;"	m	class:subscriber
+eventgroup_id_	publisher.hpp	/^    std::uint16_t eventgroup_id_ = 0x4455, event_id_ = 0x8777;$/;"	m	class:publisher
+eventgroup_id_	subscriber.hpp	/^    std::uint16_t eventgroup_id_ = 0x4455, event_id_ = 0x8777;$/;"	m	class:subscriber
+exit	publisher.hpp	/^    bool exit()$/;"	f	class:publisher
+exit	subscriber.hpp	/^    bool exit()$/;"	f	class:subscriber
+fragmenter_	publisher.hpp	/^    MessageFragmenter fragmenter_;$/;"	m	class:publisher
+inform_sender	subscriber.hpp	/^    void inform_sender()$/;"	f	class:subscriber
+init	publisher.hpp	/^    bool init()$/;"	f	class:publisher
+init	subscriber.hpp	/^    bool init()$/;"	f	class:subscriber
+instance_id_	publisher.hpp	/^    std::uint16_t service_id_ = 0x1234, instance_id_ = 0x5678;$/;"	m	class:publisher
+instance_id_	subscriber.hpp	/^    std::uint16_t service_id_ = 0x1234, instance_id_ = 0x5678;$/;"	m	class:subscriber
+main	socket_pub.cpp	/^int main()$/;"	f
+main	socket_sub.cpp	/^int main()$/;"	f
+mutex_	publisher.hpp	/^    std::mutex mutex_;$/;"	m	class:publisher
+mutex_	subscriber.hpp	/^    std::mutex mutex_;$/;"	m	class:subscriber
+offer	publisher.hpp	/^    void offer()$/;"	f	class:publisher
+on_availability	subscriber.hpp	/^    void on_availability(vsomeip::service_t service, vsomeip::instance_t instance,$/;"	f	class:subscriber
+on_data	subscriber.hpp	/^    void on_data(const std::shared_ptr<vsomeip::message> &message)$/;"	f	class:subscriber
+on_ready	publisher.hpp	/^    void on_ready(const std::shared_ptr<vsomeip::message> &msg)$/;"	f	class:publisher
+on_shutdown	publisher.hpp	/^    void on_shutdown(const std::shared_ptr<vsomeip::message> &msg)$/;"	f	class:publisher
+on_state	publisher.hpp	/^    void on_state(vsomeip::state_type_e e)$/;"	f	class:publisher
+on_state	subscriber.hpp	/^    void on_state(vsomeip::state_type_e e)$/;"	f	class:subscriber
+on_subscription_change	subscriber.hpp	/^    bool on_subscription_change(const vsomeip::client_t client,$/;"	f	class:subscriber
+on_subscription_status_change	subscriber.hpp	/^    void on_subscription_status_change(const vsomeip::service_t service,$/;"	f	class:subscriber
+publisher	publisher.hpp	/^    publisher()$/;"	f	class:publisher
+publisher	publisher.hpp	/^class publisher$/;"	c
+ready_method_id_	publisher.hpp	/^    std::uint16_t ready_method_id_ = 0x7777;$/;"	m	class:publisher
+ready_method_id_	subscriber.hpp	/^    std::uint16_t ready_method_id_ = 0x7777;$/;"	m	class:subscriber
+reassembler_	subscriber.hpp	/^    MessageReassembler reassembler_;$/;"	m	class:subscriber
+run	publisher.hpp	/^    void run(const std::string &message, std::chrono::milliseconds spacing)$/;"	f	class:publisher
+run	subscriber.hpp	/^    void run(const std::chrono::milliseconds &duration)$/;"	f	class:subscriber
+send	publisher.hpp	/^    void send(const std::string &message, std::chrono::milliseconds spacing)$/;"	f	class:publisher
+service_id_	publisher.hpp	/^    std::uint16_t service_id_ = 0x1234, instance_id_ = 0x5678;$/;"	m	class:publisher
+service_id_	subscriber.hpp	/^    std::uint16_t service_id_ = 0x1234, instance_id_ = 0x5678;$/;"	m	class:subscriber
+shutdown_method_id_	publisher.hpp	/^    std::uint16_t shutdown_method_id_ = 0x8888;$/;"	m	class:publisher
+shutdown_method_id_	subscriber.hpp	/^    std::uint16_t shutdown_method_id_ = 0x8888;$/;"	m	class:subscriber
+someip_thread_	publisher.hpp	/^    std::thread someip_thread_;$/;"	m	class:publisher
+someip_thread_	subscriber.hpp	/^    std::thread someip_thread_;$/;"	m	class:subscriber
+start	publisher.hpp	/^    void start()$/;"	f	class:publisher
+start	subscriber.hpp	/^    void start()$/;"	f	class:subscriber
+subscriber	subscriber.hpp	/^    subscriber()$/;"	f	class:subscriber
+subscriber	subscriber.hpp	/^class subscriber$/;"	c
+~publisher	publisher.hpp	/^    ~publisher() { exit(); }$/;"	f	class:publisher
+~subscriber	subscriber.hpp	/^    ~subscriber() { exit(); }$/;"	f	class:subscriber

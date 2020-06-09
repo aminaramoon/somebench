@@ -80,15 +80,15 @@ include socket/CMakeFiles/socket_subscriber.dir/flags.make
 socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o: socket/CMakeFiles/socket_subscriber.dir/flags.make
 socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o: ../socket/socket_sub.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/amin/Workspace/local/someip_benchmark/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o"
-	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /bin/g++-9  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o -c /home/amin/Workspace/local/someip_benchmark/socket/socket_sub.cpp
+	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/socket_subscriber.dir/socket_sub.cpp.o -c /home/amin/Workspace/local/someip_benchmark/socket/socket_sub.cpp
 
 socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/socket_subscriber.dir/socket_sub.cpp.i"
-	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/amin/Workspace/local/someip_benchmark/socket/socket_sub.cpp > CMakeFiles/socket_subscriber.dir/socket_sub.cpp.i
+	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/amin/Workspace/local/someip_benchmark/socket/socket_sub.cpp > CMakeFiles/socket_subscriber.dir/socket_sub.cpp.i
 
 socket/CMakeFiles/socket_subscriber.dir/socket_sub.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/socket_subscriber.dir/socket_sub.cpp.s"
-	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/amin/Workspace/local/someip_benchmark/socket/socket_sub.cpp -o CMakeFiles/socket_subscriber.dir/socket_sub.cpp.s
+	cd /home/amin/Workspace/local/someip_benchmark/build/socket && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/amin/Workspace/local/someip_benchmark/socket/socket_sub.cpp -o CMakeFiles/socket_subscriber.dir/socket_sub.cpp.s
 
 # Object files for target socket_subscriber
 socket_subscriber_OBJECTS = \
