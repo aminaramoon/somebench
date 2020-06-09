@@ -146,7 +146,7 @@ public:
     {
       std::cout << ">>>> info ||| "
                 << "sending ready message" << std::endl;
-      int message = 124;
+      int message = -124;
       sendto(cmd_socket_, (const void *)&message, sizeof(int), 0,
              (const sockaddr *)&server_addr_, sizeof(server_addr_));
       std::this_thread::sleep_for(std::chrono::milliseconds(1000));
