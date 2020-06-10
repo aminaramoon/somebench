@@ -6,6 +6,7 @@
 #include <condition_variable>
 #include <csignal>
 #include <future>
+#include <cmath>
 #include <iostream>
 #include <mutex>
 #include <string>
@@ -62,9 +63,11 @@ class tcp_subscriber {
     auto reader_thread_ = std::thread([this]() { receive_message(); });
     auto coordinator = std::thread([this]() { coordinate(); });
 
+    latencies.reserve(200);
+
     while (!stop_token_) {
       auto [reassembled_msg, id] = reassembler_.GetReassembledMessage();
-      std::cout << reassembler_.Latency().count() << std::endl;
+      latencies.emplace_back(reassembler_.Latency());
       if (reassembled_msg.empty() || stop_token_) break;
       number_of_message_++;
 
@@ -167,13 +170,33 @@ class tcp_subscriber {
     sendto(cmd_socket_, (const void *)&message, sizeof(int), 0, (const sockaddr *)&server_addr_,
            sizeof(server_addr_));
 
+    auto stats = calcualte_stats();
+
     std::cout << ">>>> info ||| " << last_id_ << ", "
               << std::chrono::duration_cast<std::chrono::microseconds>(last_ts_ - first_ts_).count()
               << " microseconds "
               << "# packets received " << number_packet_ << ", # messages received "
               << number_of_message_ << std::endl;
+    std::cout << ">>>> info ||| "
+              << "latency = " << stats.first << " +- " << stats.second << std::endl;
 
     exit();
+  }
+
+  std::pair<double, double> calcualte_stats() const {
+    double sum = 0.0, mean, std_dev = 0.0;
+
+    for (const auto &latency : latencies) {
+      sum += latency.count();
+    }
+
+    mean = sum / latencies.size();
+
+    for (const auto &latency : latencies) {
+      std_dev += std::pow(latency.count() - mean, 2);
+    }
+
+    return std::make_pair(std::move(sum), std::move(std_dev));
   }
 
  private:
