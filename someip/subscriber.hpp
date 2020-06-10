@@ -3,6 +3,7 @@
 #pragma once
 
 #include <atomic>
+#include <cmath>
 #include <condition_variable>
 #include <mutex>
 #include <string>
@@ -192,6 +193,26 @@ class subscriber {
     std::cout << ">>>> info ||| " << (stats ? "client/uid/gid => true" : "client/uid/gid => false")
               << std::endl;
     return stats;
+  }
+
+  std::pair<double, double> calcualte_stats() const {
+    double sum = 0.0, mean, std_dev = 0.0;
+
+    for (const auto &latency : latencies) {
+      std::cout << latency.count() << std::endl;
+      sum += latency.count();
+    }
+
+    mean = sum / latencies.size();
+
+    std::cout << "mean = " << mean << std::endl;
+
+    for (const auto &latency : latencies) std_dev += std::pow(latency.count() - mean, 2);
+    std_dev = std::sqrt(std_dev / latencies.size());
+
+    std::cout << "std_dev = " << std_dev << std::endl;
+
+    return std::make_pair(std::move(sum), std::move(std_dev));
   }
 
  private:

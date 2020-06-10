@@ -169,6 +169,8 @@ class udp_subscriber {
 
     for (const auto &latency : latencies) std_dev += std::pow(latency.count() - mean, 2);
 
+    std_dev = std::sqrt(std_dev / latencies.size());
+
     std::cout << "std_dev = " << std_dev << std::endl;
 
     return std::make_pair(std::move(sum), std::move(std_dev));

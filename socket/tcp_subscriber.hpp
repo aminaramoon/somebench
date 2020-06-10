@@ -194,6 +194,7 @@ class tcp_subscriber {
     std::cout << "mean = " << mean << std::endl;
 
     for (const auto &latency : latencies) std_dev += std::pow(latency.count() - mean, 2);
+    std_dev = std::sqrt(std_dev / latencies.size());
 
     std::cout << "std_dev = " << std_dev << std::endl;
 
