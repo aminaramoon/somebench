@@ -64,6 +64,7 @@ class tcp_subscriber {
 
     while (!stop_token_) {
       auto [reassembled_msg, id] = reassembler_.GetReassembledMessage();
+      std::cout << reassembler_.Latency().count() << std::endl;
       if (reassembled_msg.empty() || stop_token_) break;
       number_of_message_++;
 
@@ -192,4 +193,5 @@ class tcp_subscriber {
   std::size_t message_size_{0};
   std::chrono::system_clock::time_point first_ts_, last_ts_;
   int last_id_{0};
+  std::vector<std::chrono::microseconds> latencies;
 };
