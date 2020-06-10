@@ -55,6 +55,7 @@ class udp_publisher {
 
       fragmenter_.Feed(message, false);
       auto payloads = fragmenter_.GetFragmentedMessages();
+      mark_payloads(payloads);
       for (const auto &payload : payloads) {
         vsomeip::byte_t *data = payload->get_data();
         data += MultipartMessageHeaderSize;
@@ -65,6 +66,15 @@ class udp_publisher {
         n_packets_sent_++;
       }
       n_message_sent_++;
+    }
+  }
+
+  void mark_payloads(std::vector<std::shared_ptr<vsomeip::payload>> &payloads) {
+    std::int64_t current_ts = std::chrono::system_clock::now().time_since_epoch().count();
+    for (const auto &payload : payloads) {
+      vsomeip::byte_t *data = payload->get_data();
+      data += MultipartMessageHeaderSize;
+      std::memcpy((void *)data, (const void *)&current_ts, sizeof(std::int64_t));
     }
   }
 

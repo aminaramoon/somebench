@@ -66,8 +66,8 @@ class tcp_subscriber {
     latencies.reserve(200);
 
     while (!stop_token_) {
-      auto [reassembled_msg, id] = reassembler_.GetReassembledMessage();
-      latencies.emplace_back(reassembler_.Latency());
+      auto [reassembled_msg, id, latency] = reassembler_.GetReassembledMessage();
+      latencies.emplace_back(latency);
       if (reassembled_msg.empty() || stop_token_) break;
       number_of_message_++;
 
@@ -177,8 +177,6 @@ class tcp_subscriber {
               << " microseconds "
               << "# packets received " << number_packet_ << ", # messages received "
               << number_of_message_ << std::endl;
-    std::cout << ">>>> info ||| "
-              << "latency = " << stats.first << " +- " << stats.second << std::endl;
 
     exit();
   }
@@ -187,14 +185,17 @@ class tcp_subscriber {
     double sum = 0.0, mean, std_dev = 0.0;
 
     for (const auto &latency : latencies) {
+      std::cout << latency.count() << std::endl;
       sum += latency.count();
     }
 
     mean = sum / latencies.size();
 
-    for (const auto &latency : latencies) {
-      std_dev += std::pow(latency.count() - mean, 2);
-    }
+    std::cout << "mean = " << mean << std::endl;
+
+    for (const auto &latency : latencies) std_dev += std::pow(latency.count() - mean, 2);
+
+    std::cout << "std_dev = " << std_dev << std::endl;
 
     return std::make_pair(std::move(sum), std::move(std_dev));
   }

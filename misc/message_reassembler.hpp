@@ -5,6 +5,7 @@
 #include <atomic>
 #include <string>
 #include <mutex>
+#include <tuple>
 #include <condition_variable>
 
 struct MessageReassembler {
@@ -31,7 +32,7 @@ struct MessageReassembler {
     }
   }
 
-  std::pair<std::string, int> GetReassembledMessage() {
+  std::tuple<std::string, int, std::chrono::microseconds> GetReassembledMessage() {
     std::unique_lock<std::mutex> lk(mutex_);
     cv_.wait(lk, [this]() { return has_message_ || !is_running_; });
 
@@ -42,7 +43,7 @@ struct MessageReassembler {
     }
     has_message_ = false;
     cv_.notify_one();
-    return std::make_pair(std::move(msg), segmented_message_.SessionId());
+    return std::make_tuple(std::move(msg), segmented_message_.SessionId(), latency_);
   }
 
   void Notify() {

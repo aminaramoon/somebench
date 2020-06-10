@@ -8,6 +8,7 @@
 #include <future>
 #include <iostream>
 #include <mutex>
+#include <cmath>
 #include <string>
 
 #include <arpa/inet.h>
@@ -18,19 +19,16 @@
 #include "misc/timer.hpp"
 #include <vsomeip/vsomeip.hpp>
 
-class udp_subscriber
-{
-public:
+class udp_subscriber {
+ public:
   udp_subscriber() {}
 
   ~udp_subscriber() { exit(); }
 
-  bool init()
-  {
+  bool init() {
     socket_ = socket(AF_INET, SOCK_DGRAM, 0);
     cmd_socket_ = socket(AF_INET, SOCK_DGRAM, 0);
-    if (socket_ == -1 || cmd_socket_ == -1)
-    {
+    if (socket_ == -1 || cmd_socket_ == -1) {
       std::cout << ">>>> error ||| "
                 << "failed to initialize sockets" << std::endl;
       return false;
@@ -44,9 +42,7 @@ public:
     const int enable = 1;
     int option = SO_REUSEADDR | SO_REUSEPORT;
     setsockopt(socket_, SOL_SOCKET, option, &enable, sizeof(int));
-    if (bind(socket_, (const struct sockaddr *)&data_addr, sizeof(data_addr)) <
-        0)
-    {
+    if (bind(socket_, (const struct sockaddr *)&data_addr, sizeof(data_addr)) < 0) {
       std::cout << ">>>> error ||| "
                 << "failed to bind to socket" << std::endl;
       return false;
@@ -62,20 +58,16 @@ public:
     return true;
   }
 
-  void run()
-  {
+  void run() {
     auto reader_thread_ = std::thread([this]() { receive_message(); });
-    auto coordinator =
-        std::thread([this]() { coordinate(); });
+    auto coordinator = std::thread([this]() { coordinate(); });
 
-    while (!stop_token_)
-    {
-      auto [reassembled_msg, id] = reassembler_.GetReassembledMessage();
-      if (reassembled_msg.empty() || stop_token_)
-        break;
+    while (!stop_token_) {
+      auto [reassembled_msg, id, latency] = reassembler_.GetReassembledMessage();
+      latencies.emplace_back(latency);
+      if (reassembled_msg.empty() || stop_token_) break;
       number_of_message_++;
-      if (number_of_message_ == 100)
-      {
+      if (number_of_message_ == 100) {
         last_ts_ = std::chrono::system_clock::now();
         last_id_ = id;
         is_done_ = true;
@@ -87,38 +79,31 @@ public:
     reader_thread_.join();
   }
 
-  bool exit()
-  {
+  bool exit() {
     shutdown(socket_, SHUT_RDWR);
     shutdown(cmd_socket_, SHUT_RDWR);
     reassembler_.Notify();
     stop_token_ = true;
-    if (reader_thread_.joinable())
-      reader_thread_.join();
+    if (reader_thread_.joinable()) reader_thread_.join();
     return true;
   }
 
-  void receive_message()
-  {
+  void receive_message() {
     is_ready_ = true;
     cv_.notify_one();
     bool keep_reading = true;
     bool first_read = true;
-    while (keep_reading && !stop_token_)
-    {
+    while (keep_reading && !stop_token_) {
       std::vector<std::uint8_t> buffer(1400);
-      int bytes_recv =
-          recvfrom(socket_, (void *)buffer.data(), 1400, 0, NULL, NULL);
+      int bytes_recv = recvfrom(socket_, (void *)buffer.data(), 1400, 0, NULL, NULL);
 
-      if (first_read)
-      {
+      if (first_read) {
         first_read = false;
         first_ts_ = std::chrono::system_clock::now();
       }
 
       keep_reading = bytes_recv > 0;
-      if (bytes_recv)
-      {
+      if (bytes_recv) {
         number_packet_++;
         auto message = vsomeip::runtime::get()->create_message(false);
         buffer.resize(bytes_recv);
@@ -128,8 +113,7 @@ public:
     }
   }
 
-  void coordinate()
-  {
+  void coordinate() {
     std::unique_lock<std::mutex> lk(mutex_);
     cv_.wait(lk, [this]() { return is_ready_.load(); });
 
@@ -138,17 +122,15 @@ public:
       int ack;
       std::cout << ">>>> info ||| "
                 << "waiting for acknowledgement!" << std::endl;
-      if (recvfrom(cmd_socket_, (void *)&ack, sizeof(int), 0, NULL, NULL) > 0)
-        acknowledged = true;
+      if (recvfrom(cmd_socket_, (void *)&ack, sizeof(int), 0, NULL, NULL) > 0) acknowledged = true;
     });
 
-    while (!acknowledged)
-    {
+    while (!acknowledged) {
       std::cout << ">>>> info ||| "
                 << "sending ready message" << std::endl;
       int message = -124;
-      sendto(cmd_socket_, (const void *)&message, sizeof(int), 0,
-             (const sockaddr *)&server_addr_, sizeof(server_addr_));
+      sendto(cmd_socket_, (const void *)&message, sizeof(int), 0, (const sockaddr *)&server_addr_,
+             sizeof(server_addr_));
       std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
@@ -156,22 +138,43 @@ public:
 
     cv_.wait(lk, [this]() { return is_done_.load(); });
 
-    std::cout
-        << ">>>> info ||| "
-        << "sending shutdown message" << std::endl;
-    int message = 666;
-    sendto(cmd_socket_, (const void *)&message, sizeof(int), 0,
-           (const sockaddr *)&server_addr_, sizeof(server_addr_));
-
     std::cout << ">>>> info ||| "
-              << last_id_ << " in " << std::chrono::duration_cast<std::chrono::microseconds>(last_ts_ - first_ts_).count() << " microseconds "
-              << "# packets received " << number_packet_
-              << ", # messages received " << number_of_message_ << std::endl;
+              << "sending shutdown message" << std::endl;
+    int message = 666;
+    sendto(cmd_socket_, (const void *)&message, sizeof(int), 0, (const sockaddr *)&server_addr_,
+           sizeof(server_addr_));
+
+    auto stats = calcualte_stats();
+
+    std::cout << ">>>> info ||| " << last_id_ << " in "
+              << std::chrono::duration_cast<std::chrono::microseconds>(last_ts_ - first_ts_).count()
+              << " microseconds "
+              << "# packets received " << number_packet_ << ", # messages received "
+              << number_of_message_ << std::endl;
 
     exit();
   }
 
-private:
+  std::pair<double, double> calcualte_stats() const {
+    double sum = 0.0, mean, std_dev = 0.0;
+
+    for (const auto &latency : latencies) {
+      std::cout << latency.count() << std::endl;
+      sum += latency.count();
+    }
+
+    mean = sum / latencies.size();
+
+    std::cout << "mean = " << mean << std::endl;
+
+    for (const auto &latency : latencies) std_dev += std::pow(latency.count() - mean, 2);
+
+    std::cout << "std_dev = " << std_dev << std::endl;
+
+    return std::make_pair(std::move(sum), std::move(std_dev));
+  }
+
+ private:
   int cmd_socket_ = -1;
   int socket_ = -1;
   bool is_reliable_{false};
@@ -185,5 +188,6 @@ private:
   std::condition_variable cv_;
   std::size_t number_packet_{0}, number_of_message_{0};
   std::chrono::system_clock::time_point first_ts_, last_ts_;
+  std::vector<std::chrono::microseconds> latencies;
   int last_id_{0};
 };
