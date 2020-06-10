@@ -199,7 +199,6 @@ class subscriber {
     double sum = 0.0, mean, std_dev = 0.0;
 
     for (const auto &latency : latencies) {
-      std::cout << latency.count() << std::endl;
       sum += latency.count();
     }
 
